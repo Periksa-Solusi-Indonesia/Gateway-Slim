@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Esign;
 
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface as Response;
