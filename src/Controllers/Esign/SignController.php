@@ -58,12 +58,11 @@ class SignController
         $parsedBody = $request->getParsedBody();
         $nik = $parsedBody['nik'] ?? '';
         $totp = $parsedBody['totp'] ?? '';
-        $imageTtdBase64 = $parsedBody['image_ttd_base64'] ?? '';
-        $pdfBase64 = $parsedBody['pdf_2_kb'] ?? '';
+        $pdfBase64 = $parsedBody['file'] ?? '';
 
         $signatureProperties = [
             [
-                'imageBase64' => $imageTtdBase64,
+                'imageBase64' => $parsedBody['imageBase64'],
                 'tampilan' => $parsedBody['tampilan'] ?? '',
                 'page' => $parsedBody['page'] ?? '',
                 'originX' => $parsedBody['originX'] ?? '',
