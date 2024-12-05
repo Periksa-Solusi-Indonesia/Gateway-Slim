@@ -58,30 +58,32 @@ class SignController
         $parsedBody = $request->getParsedBody();
         $nik = $parsedBody['nik'] ?? '';
         $totp = $parsedBody['totp'] ?? '';
-        $pdfBase64 = $parsedBody['file'] ?? '';
+        $pdfBase64 = $parsedBody['file'] ?? [];
 
-        $signatureProperties = [
-            [
-                'imageBase64' => $parsedBody['imageBase64'],
-                'tampilan' => $parsedBody['tampilan'] ?? '',
-                'page' => $parsedBody['page'] ?? '',
-                'originX' => $parsedBody['originX'] ?? '',
-                'originY' => $parsedBody['originY'] ?? '',
-                'width' => $parsedBody['width'] ?? '',
-                'height' => $parsedBody['height'] ?? '',
-                'location' => $parsedBody['location'] ?? '',
-                'reason' => $parsedBody['reason'] ?? '',
-                'contactInfo' => $parsedBody['contactInfo'] ?? ''
-            ]
-        ];
+        $signatureProperties = $parsedBody['signatureProperties'] ?? [];
+        $formattedSignatureProperties = [];
+
+        foreach ($signatureProperties as $property) {
+            $formattedSignatureProperties[] = [
+                'imageBase64' => $property['imageBase64'] ?? '',
+                'tampilan' => $property['tampilan'] ?? '',
+                'page' => $property['page'] ?? '',
+                'originX' => $property['originX'] ?? '',
+                'originY' => $property['originY'] ?? '',
+                'width' => $property['width'] ?? '',
+                'height' => $property['height'] ?? '',
+                'location' => $property['location'] ?? '',
+                'reason' => $property['reason'] ?? '',
+                'contactInfo' => $property['contactInfo'] ?? ''
+            ];
+        }
 
         $requestData = [
             'nik' => $nik,
             'totp' => $totp,
-            'signatureProperties' => $signatureProperties,
-            'file' => [$pdfBase64]
+            'signatureProperties' => $formattedSignatureProperties,
+            'file' => $pdfBase64
         ];
-
         $client = new Client();
 
         try {
@@ -89,7 +91,6 @@ class SignController
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
-
             $apiResponseBody = $apiResponse->getBody()->getContents();
             $response->getBody()->write($apiResponseBody);
             return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
@@ -102,28 +103,31 @@ class SignController
         $parsedBody = $request->getParsedBody();
         $nik = $parsedBody['nik'] ?? '';
         $passphrase = $parsedBody['passphrase'] ?? '';
-        $pdfVisibleWithImageTtd = $parsedBody['file'] ?? '';
+        $pdfVisibleWithImageTtd = $parsedBody['file'] ?? [];
 
-        $signatureProperties = [
-            [
-                'imageBase64' => $parsedBody['imageBase64'],
-                'tampilan' => $parsedBody['tampilan'] ?? '',
-                'page' => $parsedBody['page'] ?? '',
-                'originX' => $parsedBody['originX'] ?? '',
-                'originY' => $parsedBody['originY'] ?? '',
-                'width' => $parsedBody['width'] ?? '',
-                'height' => $parsedBody['height'] ?? '',
-                'location' => $parsedBody['location'] ?? '',
-                'reason' => $parsedBody['reason'] ?? '',
-                'contactInfo' => $parsedBody['contactInfo'] ?? ''
-            ]
-        ];
+        $signatureProperties = $parsedBody['signatureProperties'] ?? [];
+        $formattedSignatureProperties = [];
+
+        foreach ($signatureProperties as $property) {
+            $formattedSignatureProperties[] = [
+                'imageBase64' => $property['imageBase64'] ?? '',
+                'tampilan' => $property['tampilan'] ?? '',
+                'page' => $property['page'] ?? '',
+                'originX' => $property['originX'] ?? '',
+                'originY' => $property['originY'] ?? '',
+                'width' => $property['width'] ?? '',
+                'height' => $property['height'] ?? '',
+                'location' => $property['location'] ?? '',
+                'reason' => $property['reason'] ?? '',
+                'contactInfo' => $property['contactInfo'] ?? ''
+            ];
+        }
 
         $requestData = [
             'nik' => $nik,
             'passphrase' => $passphrase,
-            'signatureProperties' => $signatureProperties,
-            'file' => [$pdfVisibleWithImageTtd]
+            'signatureProperties' => $formattedSignatureProperties,
+            'file' => $pdfVisibleWithImageTtd
         ];
 
         $client = new Client();
