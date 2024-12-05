@@ -34,6 +34,7 @@ return function (App $app) {
     $app->group('/api/sign', function (Group $group) {
         $group->post('/get/totp', [SignController::class, 'requestOtpByNik']);
         $group->post('/pdf', [SignController::class, 'signPdfByNik']);
+        $group->post('/pdfpassphrase', [SignController::class, 'signPdfByNikPassphrase']);
     });
     $app->group('/api/verify', function (Group $group) {
         $group->post('/pdf', [VerifyController::class, 'verifyPdf']);

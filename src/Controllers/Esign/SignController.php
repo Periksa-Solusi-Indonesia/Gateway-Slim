@@ -97,4 +97,48 @@ class SignController
             return $this->handleApiError($e, $response);
         }
     }
+    public function signPdfByNikPassphrase(Request $request, Response $response)
+    {
+        $parsedBody = $request->getParsedBody();
+        $nik = $parsedBody['nik'] ?? '';
+        $passphrase = $parsedBody['passphrase'] ?? '';
+        $pdfVisibleWithImageTtd = $parsedBody['file'] ?? '';
+
+        $signatureProperties = [
+            [
+                'imageBase64' => $parsedBody['imageBase64'],
+                'tampilan' => $parsedBody['tampilan'] ?? '',
+                'page' => $parsedBody['page'] ?? '',
+                'originX' => $parsedBody['originX'] ?? '',
+                'originY' => $parsedBody['originY'] ?? '',
+                'width' => $parsedBody['width'] ?? '',
+                'height' => $parsedBody['height'] ?? '',
+                'location' => $parsedBody['location'] ?? '',
+                'reason' => $parsedBody['reason'] ?? '',
+                'contactInfo' => $parsedBody['contactInfo'] ?? ''
+            ]
+        ];
+
+        $requestData = [
+            'nik' => $nik,
+            'passphrase' => $passphrase,
+            'signatureProperties' => $signatureProperties,
+            'file' => [$pdfVisibleWithImageTtd]
+        ];
+
+        $client = new Client();
+
+        try {
+            $apiResponse = $client->post('https://esign-dev.layanan.go.id/api/v2/sign/pdf', [
+                'json' => $requestData,
+                'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
+            ]);
+
+            $apiResponseBody = $apiResponse->getBody()->getContents();
+            $response->getBody()->write($apiResponseBody);
+            return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
+        } catch (\Exception $e) {
+            return $this->handleApiError($e, $response);
+        }
+    }
 }
