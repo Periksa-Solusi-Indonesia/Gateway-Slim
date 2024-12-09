@@ -31,6 +31,7 @@ class VerifyController
     {
         $parsedBody = $request->getParsedBody();
         $file = $parsedBody['file'] ?? '';
+        $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
 
         $requestData = [
             'file' => $file
@@ -39,7 +40,8 @@ class VerifyController
         $client = new Client();
 
         try {
-            $apiResponse = $client->post('https://esign-dev.layanan.go.id/api/v2/verify/pdf', [
+            $apiUrl = $reqBodyUrl . "/api/v2/verify/pdf";
+            $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);

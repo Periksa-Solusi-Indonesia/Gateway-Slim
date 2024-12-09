@@ -31,6 +31,7 @@ class SignController
         $parsedBody = $request->getParsedBody();
         $nik = $parsedBody['nik'] ?? '';
         $data = $parsedBody['data'] ?? 1;
+        $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
 
         $requestData = [
             'nik' => $nik,
@@ -40,7 +41,8 @@ class SignController
         $client = new Client();
 
         try {
-            $apiResponse = $client->post('https://esign-dev.layanan.go.id/api/v2/sign/get/totp', [
+            $apiUrl = $reqBodyUrl . '/api/v2/sign/get/totp';
+            $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
@@ -59,6 +61,7 @@ class SignController
         $nik = $parsedBody['nik'] ?? '';
         $totp = $parsedBody['totp'] ?? '';
         $pdfBase64 = $parsedBody['file'] ?? [];
+        $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
 
         $signatureProperties = $parsedBody['signatureProperties'] ?? [];
         $formattedSignatureProperties = [];
@@ -87,7 +90,8 @@ class SignController
         $client = new Client();
 
         try {
-            $apiResponse = $client->post('https://esign-dev.layanan.go.id/api/v2/sign/pdf', [
+            $apiUrl = $reqBodyUrl . '/api/v2/sign/pdf';
+            $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
@@ -104,6 +108,7 @@ class SignController
         $nik = $parsedBody['nik'] ?? '';
         $passphrase = $parsedBody['passphrase'] ?? '';
         $pdfVisibleWithImageTtd = $parsedBody['file'] ?? [];
+        $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
 
         $signatureProperties = $parsedBody['signatureProperties'] ?? [];
         $formattedSignatureProperties = [];
@@ -133,7 +138,8 @@ class SignController
         $client = new Client();
 
         try {
-            $apiResponse = $client->post('https://esign-dev.layanan.go.id/api/v2/sign/pdf', [
+            $apiUrl = $reqBodyUrl . '/api/v2/sign/pdf';
+            $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
