@@ -1,18 +1,52 @@
-version: '3.7'
-
-volumes:
-    logs:
-        driver: local
+version: '3.8'
 
 services:
-    slim:
-        image: php:7-alpine
-        working_dir: /var/www
-        command: php -S 0.0.0.0:8080 -t public
-        environment:
-            docker: "true"
-        ports:
-            - "8080:8080"
-        volumes:
-            - .:/var/www
-            - logs:/var/www/logs
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: slim-app
+    ports:
+      - "8989:80"
+    volumes:
+      - app_data:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=slim_db
+      - DB_USER=slim_user
+      - DB_PASSWORD=slim_password
+
+  db:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: slim_db
+      MYSQL_USER: slim_user
+      MYSQL_PASSWORD: slim_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8988:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+
+volumes:
+  mariadb_data:
+    driver: local
+  app_data:
+    driver: local
