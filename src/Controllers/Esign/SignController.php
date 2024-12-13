@@ -7,6 +7,7 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use App\Models\BsreLog; 
 
 class SignController
 {
@@ -143,8 +144,11 @@ class SignController
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
-
+            $statusCode = $apiResponse->getStatusCode();
             $apiResponseBody = $apiResponse->getBody()->getContents();
+            if ($statusCode === 200) {
+                BsreLog::saveLog($requestData, $apiResponseBody);
+            }
             $response->getBody()->write($apiResponseBody);
             return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
         } catch (\Exception $e) {
