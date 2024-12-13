@@ -147,7 +147,9 @@ class SignController
             $statusCode = $apiResponse->getStatusCode();
             $apiResponseBody = $apiResponse->getBody()->getContents();
             if ($statusCode === 200) {
-                BsreLog::saveLog($requestData, $apiResponseBody);
+                $logData = $requestData;
+                unset($logData['passphrase']);
+                BsreLog::saveLog($logData, $apiResponseBody);
             }
             $response->getBody()->write($apiResponseBody);
             return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
