@@ -8,6 +8,8 @@ use GuzzleHttp\Exception\ServerException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use App\Models\BsreLog; 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 class SignController
 {
@@ -146,15 +148,36 @@ class SignController
             ]);
             $statusCode = $apiResponse->getStatusCode();
             $apiResponseBody = $apiResponse->getBody()->getContents();
-            if ($statusCode === 200) {
-                $logData = $requestData;
-                unset($logData['passphrase']);
-                BsreLog::saveLog($logData, $apiResponseBody);
-            }
+            $log = new Logger('api-response');
+            $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/api_response.log', Logger::INFO));
+            $logData = $requestData;
+            unset($logData['passphrase']); 
+            $log->info('API Response:', [
+                'response' => $apiResponseBody,
+            ]);
+            BsreLog::saveLog($logData, $apiResponseBody);
             $response->getBody()->write($apiResponseBody);
             return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
         } catch (\Exception $e) {
-            return $this->handleApiError($e, $response);
+            $log = new Logger('api-error');
+            $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/api_error.log', Logger::ERROR));
+
+            $logData = $requestData;
+            unset($logData['passphrase']); 
+            $apiResponseMessage = $e->getMessage();
+
+            if ($e instanceof ClientException || $e instanceof ServerException) {
+                $apiResponse = $e->getResponse();
+                $apiResponseMessage = $apiResponse->getBody()->getContents(); // Hanya ambil JSON body
+            }
+            $log->error('API Error:', [
+                'error_message' => $apiResponseMessage,
+            ]);
+            BsreLog::saveLog($logData, $apiResponseMessage);
+            
+            $response->getBody()->write($apiResponseMessage);
+            return $response->withHeader('Content-Type', 'application/json')->withStatus(400);
+
         }
     }
 }
