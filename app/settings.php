@@ -18,18 +18,18 @@ return function (ContainerBuilder $containerBuilder) {
                 'logErrorDetails'     => false,
                 'logger' => [
                     'name' => 'slim-app',
-                    'path' => isset($_SERVER['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
+                    'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
                 ],
                 'db' => [
-                    'driver'    => $_SERVER['DB_CONNECTION'],
-                    'host'      => $_SERVER['DB_HOST'],
-                    'database'  => $_SERVER['DB_DATABASE'],
-                    'username'  => $_SERVER['DB_USERNAME'],
-                    'password'  => $_SERVER['DB_PASSWORD'],
-                    'charset'   => $_SERVER['DB_CHARSET'] ?: 'utf8',
-                    'collation' => $_SERVER['DB_COLLATION'] ?: 'utf8_unicode_ci',
-                    'prefix'    => $_SERVER['DB_PREFIX'] ?: '',
+                    'driver'    => $_ENV['DB_CONNECTION'] ?? 'mysql',
+                    'host'      => $_ENV['DB_HOST'] ?? '127.0.0.1',
+                    'database'  => $_ENV['DB_DATABASE'] ?? 'default_database',
+                    'username'  => $_ENV['DB_USERNAME'] ?? 'default_user',
+                    'password'  => $_ENV['DB_PASSWORD'] ?? '',
+                    'charset'   => $_ENV['DB_CHARSET'] ?? 'utf8',
+                    'collation' => $_ENV['DB_COLLATION'] ?? 'utf8_unicode_ci',
+                    'prefix'    => $_ENV['DB_PREFIX'] ?? '',
                 ]
             ]);
         }
