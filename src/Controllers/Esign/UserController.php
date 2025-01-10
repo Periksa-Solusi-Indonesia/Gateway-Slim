@@ -33,7 +33,7 @@ class UserController
         $email = $parsedBody['email'] ?? '';
         $oidInstansi = $parsedBody['oid_instansi'] ?? '';
         $suratRekomendasiBase64 = $parsedBody['suratRekomendasiBase64'] ?? 'NULL';
-
+        $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
         $requestData = [
             'nama' => $nama,
             'email' => $email,
@@ -43,7 +43,8 @@ class UserController
         $client = new Client();
 
         try {
-            $apiResponse = $client->post('https://esign-dev.layanan.go.id/api/v2/user/registration', [
+            $apiUrl = $reqBodyUrl . '/api/v2/user/registration';
+            $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
@@ -60,6 +61,7 @@ class UserController
     {
         $parsedBody = $request->getParsedBody();
         $nik = $parsedBody['nik'] ?? '';
+        $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
         $requestData = [
             'nik' => $nik
         ];
@@ -67,7 +69,8 @@ class UserController
         $client = new Client();
 
         try {
-            $apiResponse = $client->post('https://esign-dev.layanan.go.id/api/v2/user/check/status', [
+            $apiUrl = $reqBodyUrl . '/api/v2/user/check/status';
+            $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
@@ -81,12 +84,15 @@ class UserController
 
     public function getCertificateChainByNik(Request $request, Response $response, $args)
     {
+        $parsedBody = $request->getParsedBody();
+        $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
         $id = $args['id'] ?? '';
 
         $client = new Client();
 
         try {
-            $apiResponse = $client->get("https://esign-dev.layanan.go.id/api/v2/user/certificate/chain/{$id}", [
+            $apiUrl = $reqBodyUrl . "/api/v2/user/certificate/chain/{$id}";
+            $apiResponse = $client->get($apiUrl, [
                 'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
             ]);
             $apiResponseBody = $apiResponse->getBody()->getContents();
