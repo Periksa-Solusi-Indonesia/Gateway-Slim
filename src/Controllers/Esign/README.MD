@@ -22,12 +22,13 @@ Below is a guide on how to use the available endpoints
 #### - Request Header Parameters: `-`
 #### - Request Body Parameters : 
 
-| Parameter                | Type   | Description              | Required | Example Value       |
-| :----------------------- | :----- | :----------------------- | :------- | :------------------ |
-| `nama`                   | string | full name                | Yes      | `testing`           |
-| `email`                  | string | email                    | Yes      | `testing@gmail.com` |
-| `oid_instansi`           | string | oid instansi             | No       | ` null `               |
-| `suratRekomendasiBase64` | string | surat rekomendasi base64 | No       | `{base64}`          |
+| Parameter                | Type   | Description              | Required | Example Value                     |
+| :----------------------- | :----- | :----------------------- | :------- | :-------------------------------- |
+| `nama`                   | string | full name                | Yes      | `testing`                         |
+| `email`                  | string | email                    | Yes      | `testing@gmail.com`               |
+| `oid_instansi`           | string | oid instansi             | No       | ` null `                          |
+| `suratRekomendasiBase64` | string | surat rekomendasi base64 | No       | `{base64}`                        |
+| `url`                    | string | url bsre                 | Yes      | `https://esign-dev.layanan.go.id` |
 
 #### Usage Example
 `Endpoint` = `{{baseUrl}}/api/user/register`
@@ -38,7 +39,8 @@ Below is a guide on how to use the available endpoints
     "nama": "testing",
     "email": "testing@gmail.com",
     "oid_instansi": "",
-    "suratRekomendasiBase64": "NULL"
+    "suratRekomendasiBase64": "NULL",
+    "url": "https://esign-dev.layanan.go.id"
 }
 ```
 #### - Response Body :
@@ -57,9 +59,10 @@ Below is a guide on how to use the available endpoints
 #### - Request Header Parameters: `-`
 #### - Request Body Parameters : 
 
-| Parameter      | Type   | Description          | Required | Example Value      |
-| :------------- | :----- | :------------------- | :------- | :----------------- |
-| `nik`          | string | nik                  | Yes      | `3209145563023366` |
+| Parameter      | Type   | Description          | Required | Example Value                     |
+| :------------- | :----- | :------------------- | :------- | :-------------------------------- |
+| `nik`          | string | nik                  | Yes      | `3209145563023366`                |
+| `url`          | string | url bsre             | Yes      | `https://esign-dev.layanan.go.id` |
 
 #### Usage Example
 `Endpoint` = `{{baseUrl}}/api/user/check/status`
@@ -67,7 +70,8 @@ Below is a guide on how to use the available endpoints
 #### - Request Body: 
 ```
 {
-    "nik":"3209145804020011"
+    "nik":"3209145804020011",
+    "url": "https://esign-dev.layanan.go.id"
 }
 ```
 #### - Response Body :
@@ -85,16 +89,26 @@ Below is a guide on how to use the available endpoints
 #### - Endpoint = `{{baseUrl}}/api/user/certificate/chain/:id`
 #### - Path Parameters: 
 
-| Parameter | Type   | Description           | Required | Example Value      |
-| :-------- | :----- | :-------------------- | :------- | :----------------- |
-| `id`      | string | nik                   | Yes      | `1234567890123456` |
+| Parameter | Type   | Description | Required | Example Value      |
+| :-------- | :----- | :---------- | :------- | :----------------- |
+| `id`      | string | nik         | Yes      | `1234567890123456` |
 
 #### - Request Header Parameters: `-`
-#### - Request Body Parameters : `-`
+#### - Request Body Parameters : 
+
+| Parameter | Type   | Description | Required | Example Value                     |
+| :-------- | :----- | :---------- | :------- | :-------------------------------- |
+| `url`     | string | url bsre    | Yes      | `https://esign-dev.layanan.go.id` |
+
 #### Usage Example
 `Endpoint` = `{{baseUrl}}/api/user/certificate/chain/1234567890123456`
 #### - Request Header: `-`
-#### - Request Body: `-`
+#### - Request Body: 
+```
+{
+    "url": "https://esign-dev.layanan.go.id"
+}
+```
 #### - Response Body :
 ```
 {
@@ -115,10 +129,11 @@ Below is a guide on how to use the available endpoints
 #### - Request Header Parameters: `-`
 #### - Request Body Parameters : 
 
-| Parameter | Type    | Description | Required | Example Value      |
-| :-------- | :------ | :---------- | :------- | :----------------- |
-| `nik`     | string  | nik         | Yes      | `1234567890123456` |
-| `data`    | integer | data        | Yes      | `1`                |
+| Parameter | Type    | Description | Required | Example Value                     |
+| :-------- | :------ | :---------- | :------- | :-------------------------------- |
+| `nik`     | string  | nik         | Yes      | `1234567890123456`                |
+| `data`    | integer | data        | Yes      | `1`                               |
+| `url`     | string  | url bsre    | Yes      | `https://esign-dev.layanan.go.id` |
 
 #### Usage Example
 `Endpoint` = `{{baseUrl}}/api/sign/get/totp`
@@ -127,7 +142,8 @@ Below is a guide on how to use the available endpoints
 ```
 {
     "nik": "1234567890123456",
-    "data": 1
+    "data": 1,
+    "url": "https://esign-dev.layanan.go.id"
 }
 ```
 #### - Response Body :
@@ -147,12 +163,13 @@ Below is a guide on how to use the available endpoints
 #### - Request Header Parameters: `-`
 #### - Request Body Parameters : 
 
-| Parameter             | Type         | Description          | Required | Example Value      |
-| :-------------------- | :----------- | :------------------- | :------- | :----------------- |
-| `nik`                 | string       | nik                  | Yes      | `1234567890123456` |
-| `totp`                | string       | otp                  | Yes      | `1234`             |
-| `file`                | string       | base64 format        | Yes      | `{base64}`         |
-| `signatureProperties` | array object | signature properties | Yes      | see below          |
+| Parameter             | Type         | Description          | Required | Example Value                     |
+| :-------------------- | :----------- | :------------------- | :------- | :-------------------------------- |
+| `nik`                 | string       | nik                  | Yes      | `1234567890123456`                |
+| `totp`                | string       | otp                  | Yes      | `1234`                            |
+| `file`                | string       | base64 format        | Yes      | `{base64}`                        |
+| `signatureProperties` | array object | signature properties | Yes      | see below                         |
+| `url`                 | string       | url bsre             | Yes      | `https://esign-dev.layanan.go.id` |
 
 #### Item Object Properties (for `signatureProperties`)
 
@@ -177,6 +194,7 @@ Below is a guide on how to use the available endpoints
 {
     "nik": "{{nik}}",
     "totp": "000000",
+    "url": "https://esign-dev.layanan.go.id",
     "signatureProperties": [
         {
             "imageBase64": "{{image_ttd_base64}}",
@@ -214,12 +232,13 @@ Below is a guide on how to use the available endpoints
 #### - Request Header Parameters:
 #### - Request Body Parameters : 
 
-| Parameter             | Type         | Description          | Required | Example Value      |
-| :-------------------- | :----------- | :------------------- | :------- | :----------------- |
-| `nik`                 | string       | nik                  | Yes      | `1234567890123456` |
-| `passphrase`          | string       | passphrase           | Yes      | `1234`             |
-| `file`                | string       | base64 format        | Yes      | `{base64}`         |
-| `signatureProperties` | array object | signature properties | Yes      | see below          |
+| Parameter             | Type         | Description          | Required | Example Value                     |
+| :-------------------- | :----------- | :------------------- | :------- | :-------------------------------- |
+| `nik`                 | string       | nik                  | Yes      | `1234567890123456`                |
+| `passphrase`          | string       | passphrase           | Yes      | `1234`                            |
+| `file`                | string       | base64 format        | Yes      | `{base64}`                        |
+| `signatureProperties` | array object | signature properties | Yes      | see below                         |
+| `url`                 | string       | url bsre             | Yes      | `https://esign-dev.layanan.go.id` |
 
 #### Item Object Properties (for `signatureProperties`)
 
@@ -244,6 +263,7 @@ Below is a guide on how to use the available endpoints
 {
     "nik": "{{nik}}",
     "passphrase": "000000",
+    "url": "https://esign-dev.layanan.go.id",
     "signatureProperties": [
         {
             "imageBase64": "{{image_ttd_base64}}",
@@ -281,9 +301,10 @@ Below is a guide on how to use the available endpoints
 #### - Request Header Parameters : `-`                                         
 #### - Request Body Parameters :
 
-| Parameter        | Type   | Description        | Required | Example Value |
-| :--------------- | :----- | :----------------- | :------- | :------------ |
-| `file`           | string | file signed base64 | Yes      | `{base64}`    |
+| Parameter        | Type   | Description        | Required | Example Value                     |
+| :--------------- | :----- | :----------------- | :------- | :-------------------------------- |
+| `file`           | string | file signed base64 | Yes      | `{base64}`                        |
+| `url`            | string | url bsre           | Yes      | `https://esign-dev.layanan.go.id` |
 
 #### Usage Example
 `Endpoint` = `{{baseUrl}}/api/verify/pdf`
@@ -291,7 +312,8 @@ Below is a guide on how to use the available endpoints
 #### - Request Body:
 ```
 {
-    "file": "{{pdf_signed_base64}}"
+    "file": "{{pdf_signed_base64}}",
+    "url": "https://esign-dev.layanan.go.id"
 }
 ```
 #### - Response Body :
