@@ -11,9 +11,9 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Unduh dan pasang APM agent Elastic
-RUN wget https://github.com/elastic/apm-agent-php/releases/download/v1.15.0/apm-agent-php_1.15.0_all.deb \
-    && dpkg -i apm-agent-php_1.15.0_all.deb \
-    && rm apm-agent-php_1.15.0_all.deb
+RUN wget https://github.com/elastic/apm-agent-php/releases/download/v1.15.0/apm-agent-php_1.15.0_amd64.deb \
+    && dpkg -i apm-agent-php_1.15.0_amd64.deb \
+    && rm apm-agent-php_1.15.0_amd64.deb
 
 # Salin konfigurasi PHP
 COPY ./conf/php.ini /usr/local/etc/php/php.ini

@@ -13,8 +13,8 @@ use Dotenv\Dotenv;
 
 require __DIR__ . '/../vendor/autoload.php';
 // $dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->safeLoad();
+$dotenv = Dotenv::createImmutable();
+$dotenv->load();
 
 // Instantiate PHP-DI ContainerBuilder
 $containerBuilder = new ContainerBuilder();
