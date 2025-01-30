@@ -26,6 +26,7 @@ WORKDIR /var/www/html
 
 # Salin file aplikasi ke dalam container
 COPY . /var/www/html
+COPY env /var/www/html/.env
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
