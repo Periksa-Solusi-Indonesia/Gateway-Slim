@@ -22,14 +22,14 @@ return function (ContainerBuilder $containerBuilder) {
                     'level' => Logger::DEBUG,
                 ],
                 'db' => [
-                    'driver'    => $_ENV['DB_CONNECTION'] ?? 'mysql',
-                    'host'      => $_ENV['DB_HOST'] ?? '127.0.0.1',
-                    'database'  => $_ENV['DB_DATABASE'] ?? 'default_database',
-                    'username'  => $_ENV['DB_USERNAME'] ?? 'default_user',
-                    'password'  => $_ENV['DB_PASSWORD'] ?? '',
-                    'charset'   => $_ENV['DB_CHARSET'] ?? 'utf8',
-                    'collation' => $_ENV['DB_COLLATION'] ?? 'utf8_unicode_ci',
-                    'prefix'    => $_ENV['DB_PREFIX'] ?? '',
+                    'driver'    => getenv('DB_CONNECTION'),
+                    'host'      => getenv('DB_HOST'),
+                    'database'  => getenv('DB_DATABASE'),
+                    'username'  => getenv('DB_USERNAME'),
+                    'password'  => getenv('DB_PASSWORD'),
+                    'charset'   => 'utf8',
+                    'collation' => 'utf8_unicode_ci',
+                    'prefix'    => '',
                 ]
             ]);
         }
