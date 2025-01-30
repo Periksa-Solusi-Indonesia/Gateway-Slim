@@ -148,13 +148,13 @@ class SignController
             ]);
             $statusCode = $apiResponse->getStatusCode();
             $apiResponseBody = $apiResponse->getBody()->getContents();
-            $log = new Logger('api-response');
-            $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/api_response.log', Logger::INFO));
+            // $log = new Logger('api-response');
+            // $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/api_response.log', Logger::INFO));
             $logData = $requestData;
-            unset($logData['passphrase']); 
-            $log->info('API Response:', [
-                'response' => $apiResponseBody,
-            ]);
+            // unset($logData['passphrase']); 
+            // $log->info('API Response:', [
+            //     'response' => $apiResponseBody,
+            // ]);
             BsreLog::saveLog($logData, $apiResponseBody);
             $response->getBody()->write($apiResponseBody);
             return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
