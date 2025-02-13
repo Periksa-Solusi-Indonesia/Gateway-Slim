@@ -112,8 +112,8 @@ class SignController
         $passphrase = $parsedBody['passphrase'] ?? '';
         $pdfVisibleWithImageTtd = $parsedBody['file'] ?? [];
         $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
-        $username = $parsedBody['username'] ?? '';
-        $password = $parsedBody['password'] ?? '';
+        $username = $parsedBody['username'] ?? 'esign';
+        $password = $parsedBody['password'] ?? 'wrjcgX6526A2dCYSAV6u';
 
         $signatureProperties = $parsedBody['signatureProperties'] ?? [];
         $formattedSignatureProperties = [];
