@@ -112,6 +112,8 @@ class SignController
         $passphrase = $parsedBody['passphrase'] ?? '';
         $pdfVisibleWithImageTtd = $parsedBody['file'] ?? [];
         $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
+        $username = $parsedBody['username'] ?? '';
+        $password = $parsedBody['password'] ?? '';
 
         $signatureProperties = $parsedBody['signatureProperties'] ?? [];
         $formattedSignatureProperties = [];
@@ -144,7 +146,7 @@ class SignController
             $apiUrl = $reqBodyUrl . '/api/v2/sign/pdf';
             $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
-                'auth' => ['esign', 'wrjcgX6526A2dCYSAV6u'],
+                'auth' => [$username, $password],
             ]);
             $statusCode = $apiResponse->getStatusCode();
             $apiResponseBody = $apiResponse->getBody()->getContents();
