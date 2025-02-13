@@ -143,7 +143,7 @@ class SignController
         $client = new Client();
 
         try {
-            $apiUrl = $reqBodyUrl . '/api/v2/sign/pdf';
+            $apiUrl = rtrim($reqBodyUrl, '/') . '/api/v2/sign/pdf';
             $apiResponse = $client->post($apiUrl, [
                 'json' => $requestData,
                 'auth' => [$username, $password],
