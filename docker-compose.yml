@@ -45,8 +45,22 @@ services:
     depends_on:
       - db
 
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    environment:
+      - ADMIN_PASSWORD=admin123
+
 volumes:
   mariadb_data:
     driver: local
   app_data:
+    driver: local
+  portainer_data:
     driver: local
