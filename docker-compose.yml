@@ -58,17 +58,6 @@ services:
     environment:
       - ADMIN_PASSWORD=admin123  # Password default untuk login Portainer
 
-  ngrok:  # Service Ngrok untuk membuat tunnel ke internet
-    image: wernight/ngrok:latest  # Menggunakan image Ngrok dari Docker Hub
-    container_name: ngrok  # Nama container untuk Ngrok
-    restart: always  # Auto start container saat restart sistem
-    depends_on:
-      - app  # Bergantung pada service 'app'
-    environment:
-      - NGROK_AUTHTOKEN=<YOUR_NGROK_AUTHTOKEN>  # Ganti dengan authtoken dari Ngrok
-      - NGROK_REGION=ap  # Region Asia-Pasifik (AP) untuk latency lebih rendah
-      - NGROK_PORT=app:80  # Port yang akan ditunnelkan dari service 'app'
-
 volumes:
   mariadb_data:
     driver: local  # Volume lokal untuk menyimpan data database
