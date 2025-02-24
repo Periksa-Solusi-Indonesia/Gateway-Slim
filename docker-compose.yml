@@ -11,7 +11,7 @@ services:
     volumes:
       - app_data:/var/www/html  # Volume untuk menyimpan data aplikasi agar persistent
     depends_on:
-      - db  # Dependensi ke service 'db' agar start setelah database
+      - db  # Dependensi ke service 'db'
     environment:  # Variabel lingkungan untuk konfigurasi aplikasi
       - DB_HOST=db  # Host database yang akan dihubungkan
       - DB_PORT=3306  # Port database yang digunakan
@@ -44,7 +44,7 @@ services:
       PMA_HOST: db  # Host database yang terhubung dengan phpMyAdmin
       PMA_PORT: 3306  # Port database yang digunakan oleh phpMyAdmin
     depends_on:
-      - db  # Dependensi ke service 'db' agar start setelah database
+      - db  # Dependensi ke service 'db'
 
   portainer:  # Service Portainer untuk mengelola container Docker secara visual
     image: portainer/portainer-ce:latest  # Menggunakan image Portainer Community Edition versi terbaru
@@ -57,6 +57,17 @@ services:
       - portainer_data:/data  # Volume untuk menyimpan data konfigurasi Portainer
     environment:
       - ADMIN_PASSWORD=admin123  # Password default untuk login Portainer
+
+  ngrok:  # Service Ngrok untuk membuat tunnel ke internet
+    image: wernight/ngrok:latest  # Menggunakan image Ngrok dari Docker Hub
+    container_name: ngrok  # Nama container untuk Ngrok
+    restart: always  # Auto start container saat restart sistem
+    depends_on:
+      - app  # Bergantung pada service 'app'
+    environment:
+      - NGROK_AUTHTOKEN=<YOUR_NGROK_AUTHTOKEN>  # Ganti dengan authtoken dari Ngrok
+      - NGROK_REGION=ap  # Region Asia-Pasifik (AP) untuk latency lebih rendah
+      - NGROK_PORT=app:80  # Port yang akan ditunnelkan dari service 'app'
 
 volumes:
   mariadb_data:
