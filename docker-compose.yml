@@ -13,11 +13,13 @@ services:
     depends_on:
       - db  # Dependensi ke service 'db'
     environment:  # Variabel lingkungan untuk konfigurasi aplikasi
+      - DB_CONNECTION=mysql
       - DB_HOST=db  # Host database yang akan dihubungkan
       - DB_PORT=3306  # Port database yang digunakan
       - DB_NAME=slim_db  # Nama database yang akan digunakan
       - DB_USER=slim_user  # Username database
       - DB_PASSWORD=slim_password  # Password database
+      - DB_DATABASE=dbperiksa_esign
     restart: always  # Auto start container saat restart sistem
 
   db:  # Service database menggunakan MariaDB
