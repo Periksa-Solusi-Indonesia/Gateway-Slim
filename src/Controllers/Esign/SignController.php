@@ -152,10 +152,10 @@ class SignController
                 'auth' => [$username, $password],
             ]);
             $statusCode = $apiResponse->getStatusCode();
-            $apiResponseBody = $apiResponse->getBody()->getContents();
+            $apiResponseBody = ($statusCode === 200) ? json_encode(["status" => "success"]) : $apiResponse->getBody()->getContents(); 
             $status = ($statusCode === 200) ? "Berhasil" : "Gagal";
             BsreLog::saveLog($apiResponseBody, $namaFormulir, $typeFormulir, $status);
-            $response->getBody()->write($apiResponseBody);
+            $response->getBody()->write($apiResponse->getBody()->getContents());
             return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
         } catch (\Exception $e) {
             $status = "Gagal";
