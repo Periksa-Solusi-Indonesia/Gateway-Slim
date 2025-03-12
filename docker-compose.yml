@@ -30,6 +30,7 @@ services:
       MYSQL_DATABASE: slim_db  # Nama database yang dibuat saat container pertama kali running
       MYSQL_USER: slim_user  # User tambahan untuk aplikasi
       MYSQL_PASSWORD: slim_password  # Password user tambahan
+      TZ: Asia/Jakarta  # Mengatur timezone ke WIB (UTC+7)
     ports:
       - "3306:3306"  # Port mapping untuk mengakses MariaDB dari host
     volumes:
