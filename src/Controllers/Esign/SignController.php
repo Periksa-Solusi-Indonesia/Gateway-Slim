@@ -114,6 +114,9 @@ class SignController
         $reqBodyUrl = $parsedBody['url'] ?? 'https://esign-dev.layanan.go.id';
         $username = $parsedBody['username'] ?? 'esign';
         $password = $parsedBody['password'] ?? 'wrjcgX6526A2dCYSAV6u';
+        $namaFormulir = $parsedBody['nama_formulir'] ?? null;
+        $typeFormulir = $parsedBody['type_formulir'] ?? null;
+
 
         $signatureProperties = $parsedBody['signatureProperties'] ?? [];
         $formattedSignatureProperties = [];
@@ -149,23 +152,16 @@ class SignController
                 'auth' => [$username, $password],
             ]);
             $statusCode = $apiResponse->getStatusCode();
-            $apiResponseBody = $apiResponse->getBody()->getContents();
-            // $log = new Logger('api-response');
-            // $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/api_response.log', Logger::INFO));
-            $logData = $requestData;
-            // unset($logData['passphrase']); 
-            // $log->info('API Response:', [
-            //     'response' => $apiResponseBody,
-            // ]);
-            BsreLog::saveLog($logData, $apiResponseBody);
-            $response->getBody()->write($apiResponseBody);
+            $apiResponseBody = ($statusCode === 200) ? json_encode(["status" => "success"]) : $apiResponse->getBody()->getContents(); 
+            $status = ($statusCode === 200) ? "Berhasil" : "Gagal";
+            BsreLog::saveLog($apiResponseBody, $namaFormulir, $typeFormulir, $status);
+            $response->getBody()->write($apiResponse->getBody()->getContents());
             return $response->withHeader('Content-Type', 'application/json')->withStatus($apiResponse->getStatusCode());
         } catch (\Exception $e) {
+            $status = "Gagal";
             $log = new Logger('api-error');
             $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/api_error.log', Logger::ERROR));
 
-            $logData = $requestData;
-            unset($logData['passphrase']); 
             $apiResponseMessage = $e->getMessage();
 
             if ($e instanceof ClientException || $e instanceof ServerException) {
@@ -175,7 +171,7 @@ class SignController
             $log->error('API Error:', [
                 'error_message' => $apiResponseMessage,
             ]);
-            BsreLog::saveLog($logData, $apiResponseMessage);
+            BsreLog::saveLog($apiResponseMessage, $namaFormulir, $typeFormulir, $status);
             
             $response->getBody()->write($apiResponseMessage);
             return $response->withHeader('Content-Type', 'application/json')->withStatus(400);

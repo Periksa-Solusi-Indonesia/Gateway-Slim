@@ -11,15 +11,16 @@ class BsreLog extends Model
 {
     protected $table = 'bsre_log'; 
     public $timestamps = false;   
-    protected $fillable = ['request_body', 'response', 'date_make'];
+    protected $fillable = ['response', 'nama_formulir', 'type_formulir', 'status', 'date_make', 'date_update'];
 
-    public static function saveLog($requestData, $apiResponseBody)
+    public static function saveLog($apiResponseBody, $namaFormulir, $typeFormulir, $status)
     {
         try {
             DB::table('bsre_log')->insert([
-                'request_body' => json_encode($requestData),
                 'response' => $apiResponseBody,
-                'date_make' => date('Y-m-d H:i:s'), 
+                'nama_formulir' => $namaFormulir,
+                'type_formulir' => $typeFormulir,
+                'status' => $status,
             ]);
         } catch (\Exception $e) {
             throw new \Exception("Gagal menyimpan log: " . $e->getMessage());
