@@ -162,13 +162,10 @@ class SignController
             $log = new Logger('api-error');
             $log->pushHandler(new StreamHandler(__DIR__ . '/../../../logs/api_error.log', Logger::ERROR));
 
-            $apiResponseMessage = 'Terjadi Kesalahan Pada Server BSRE';
+            $apiResponseMessage = $e->getMessage();
             if ($e instanceof ClientException || $e instanceof ServerException) {
                 $apiResponse = $e->getResponse();
-                $statusCode = $apiResponse->getStatusCode();
-                if ($statusCode !== 500) {
-                    $apiResponseMessage = $apiResponse->getBody()->getContents();
-                }
+                $apiResponseMessage = $apiResponse->getBody()->getContents();
             }
             $log->error('API Error:', [
                 'error_message' => $apiResponseMessage,
