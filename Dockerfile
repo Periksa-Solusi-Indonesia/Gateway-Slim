@@ -4,10 +4,12 @@ FROM php:8.2-apache
 # Install ekstensi PHP yang diperlukan dan dependensi lainnya
 RUN apt-get update && apt-get install -y \
     libzip-dev \
+    libpq-dev \
+    default-mysql-client \
     zip \
     unzip \
     wget \
-    && docker-php-ext-install pdo pdo_mysql zip \
+    && docker-php-ext-install pdo pdo_mysql mysqli pgsql pdo_pgsql zip \
     && rm -rf /var/lib/apt/lists/*
 
 # Unduh dan pasang APM agent Elastic
