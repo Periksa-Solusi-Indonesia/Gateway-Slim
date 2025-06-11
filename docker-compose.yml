@@ -1,68 +1,80 @@
-version: '3.8'  # Versi Docker Compose yang digunakan
+version: '3.8'
 
 services:
-  app:  # Service aplikasi utama
+  app:
     build:
-      context: .  # Lokasi Dockerfile berada di direktori saat ini
-      dockerfile: Dockerfile  # Nama file Dockerfile yang digunakan
-    container_name: slim-app  # Nama container agar mudah dikenali
+      context: .
+      dockerfile: Dockerfile
+    container_name: slim-app
     ports:
-      - "8989:80"  # Port mapping dari host ke container (host:container)
+      - "8989:80"
     volumes:
-      - app_data:/var/www/html  # Volume untuk menyimpan data aplikasi agar persistent
+      - app_data:/var/www/html
     depends_on:
-      - db  # Dependensi ke service 'db'
-    environment:  # Variabel lingkungan untuk konfigurasi aplikasi
-      - DB_CONNECTION=mysql
-      - DB_HOST=db  # Host database yang akan dihubungkan
-      - DB_PORT=3306  # Port database yang digunakan
-      - DB_USERNAME=slim_user  # Username database
-      - DB_PASSWORD=slim_password  # Password database
-      - DB_DATABASE=slim_db # Nama database yang akan digunakan
-    restart: always  # Auto start container saat restart sistem
-
-  db:  # Service database menggunakan MariaDB
-    image: mariadb:latest  # Menggunakan image MariaDB versi terbaru
-    container_name: mariadb  # Nama container untuk database
-    restart: always  # Auto start container saat restart sistem
-    environment:  # Variabel lingkungan untuk konfigurasi MariaDB
-      MYSQL_ROOT_PASSWORD: root123  # Password root database
-      MYSQL_DATABASE: slim_db  # Nama database yang dibuat saat container pertama kali running
-      MYSQL_USER: slim_user  # User tambahan untuk aplikasi
-      MYSQL_PASSWORD: slim_password  # Password user tambahan
-    ports:
-      - "3306:3306"  # Port mapping untuk mengakses MariaDB dari host
-    volumes:
-      - mariadb_data:/var/lib/mysql  # Volume untuk data database agar persistent
-
-  phpmyadmin:  # Service phpMyAdmin untuk mengelola database secara visual
-    image: phpmyadmin:latest  # Menggunakan image phpMyAdmin versi terbaru
-    container_name: phpmyadmin  # Nama container untuk phpMyAdmin
-    restart: always  # Auto start container saat restart sistem
-    ports:
-      - "8988:80"  # Port mapping untuk mengakses phpMyAdmin
-    environment:  # Variabel lingkungan untuk konfigurasi phpMyAdmin
-      PMA_HOST: db  # Host database yang terhubung dengan phpMyAdmin
-      PMA_PORT: 3306  # Port database yang digunakan oleh phpMyAdmin
-    depends_on:
-      - db  # Dependensi ke service 'db'
-
-  portainer:  # Service Portainer untuk mengelola container Docker secara visual
-    image: portainer/portainer-ce:latest  # Menggunakan image Portainer Community Edition versi terbaru
-    container_name: portainer  # Nama container untuk Portainer
-    restart: always  # Auto start container saat restart sistem
-    ports:
-      - "9000:9000"  # Port mapping untuk mengakses Portainer dashboard
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock  # Memberikan akses ke Docker host
-      - portainer_data:/data  # Volume untuk menyimpan data konfigurasi Portainer
+      - db
     environment:
-      - ADMIN_PASSWORD=admin123  # Password default untuk login Portainer
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=slim_user
+      - DB_PASSWORD=slim_password
+      - DB_DATABASE=slim_db
+    restart: always
+    networks:
+      - internal
+
+  db:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: slim_db
+      MYSQL_USER: slim_user
+      MYSQL_PASSWORD: slim_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - internal
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8988:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    depends_on:
+      - db
+    networks:
+      - internal
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    environment:
+      - ADMIN_PASSWORD=admin123
+    networks:
+      - internal
 
 volumes:
   mariadb_data:
-    driver: local  # Volume lokal untuk menyimpan data database
+    driver: local
   app_data:
-    driver: local  # Volume lokal untuk menyimpan data aplikasi
+    driver: local
   portainer_data:
-    driver: local  # Volume lokal untuk menyimpan konfigurasi Portainer
+    driver: local
+
+networks:
+  internal:
+    driver: bridge
