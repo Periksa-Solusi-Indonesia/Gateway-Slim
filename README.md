@@ -40,3 +40,9 @@ composer test
 ```
 
 That's it! Now go build something cool.
+
+INSTALL TUNNEL 
+https://www.youtube.com/watch?v=SivE_EfUNd8&ab_channel=Let%27sTalkDev
+
+setting tunnel : http://slim-app:80
+token jgn lupa diganti

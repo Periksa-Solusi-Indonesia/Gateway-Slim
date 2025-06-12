@@ -20,8 +20,6 @@ services:
       - DB_PASSWORD=slim_password
       - DB_DATABASE=slim_db
     restart: always
-    networks:
-      - internal
 
   db:
     image: mariadb:latest
@@ -36,8 +34,6 @@ services:
       - "3306:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
-    networks:
-      - internal
 
   phpmyadmin:
     image: phpmyadmin:latest
@@ -50,8 +46,6 @@ services:
       PMA_PORT: 3306
     depends_on:
       - db
-    networks:
-      - internal
 
   portainer:
     image: portainer/portainer-ce:latest
@@ -64,8 +58,17 @@ services:
       - portainer_data:/data
     environment:
       - ADMIN_PASSWORD=admin123
-    networks:
-      - internal
+
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared
+    command: tunnel --no-autoupdate run --token eyJhIjoiYTliYzNjN2QyYzg3NTE5OWIwMGE2ZWNjZjZlNDlkMjIiLCJ0IjoiZGM0NTE1YzQtYjljZi00NjE1LTgwMmMtZDVhMDVmZjgyNTE1IiwicyI6Ik5HUXhPRGt4TXpZdE5qUXlOaTAwTkROa0xUbGlZbVV0Wm1aallUWmtabUpsT0dZMSJ9
+    environment:
+      - TUNNEL_TOKEN: 
+    restart: always
+    depends_on:
+      - app
 
 volumes:
   mariadb_data:
@@ -74,7 +77,3 @@ volumes:
     driver: local
   portainer_data:
     driver: local
-
-networks:
-  internal:
-    driver: bridge
